@@ -14,7 +14,23 @@ namespace PictureBrowser
     {
         public PictureBrowser()
         {
+            Picture picture= new Picture();
             InitializeComponent();
+
+        }
+
+        private void btnLoad_Click(object sender, EventArgs e)
+        {
+            Picture picture = new Picture();
+
+            if (ofdOpenPicture.ShowDialog() == DialogResult.OK)
+            {
+                picture.picturePath = ofdOpenPicture.FileName;
+                pbPicture.ImageLocation = picture.picturePath;
+                pbPicture.SizeMode = PictureBoxSizeMode.Zoom;
+                MessageBox.Show(pbPicture.ClientSize.Width.ToString() +" " + pbPicture.ClientSize.Height.ToString());
+                
+            }
         }
     }
 }

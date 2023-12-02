@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace PictureBrowser
 {
-    internal class FileHelper
+    internal class Picture
     {
-
-
+        public string picturePath {  get; set; }
     }
 }

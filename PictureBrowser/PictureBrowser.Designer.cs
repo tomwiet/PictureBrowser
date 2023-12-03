@@ -31,6 +31,7 @@
             this.pbPicture = new System.Windows.Forms.PictureBox();
             this.btnLoad = new System.Windows.Forms.Button();
             this.ofdOpenPicture = new System.Windows.Forms.OpenFileDialog();
+            this.btnClear = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbPicture)).BeginInit();
             this.SuspendLayout();
             // 
@@ -41,6 +42,7 @@
             this.pbPicture.Size = new System.Drawing.Size(642, 340);
             this.pbPicture.TabIndex = 0;
             this.pbPicture.TabStop = false;
+            this.pbPicture.LoadCompleted += new System.ComponentModel.AsyncCompletedEventHandler(this.pbPicture_LoadCompleted);
             // 
             // btnLoad
             // 
@@ -56,15 +58,27 @@
             // 
             this.ofdOpenPicture.FileName = "openFileDialog1";
             // 
+            // btnClear
+            // 
+            this.btnClear.Location = new System.Drawing.Point(400, 383);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(77, 30);
+            this.btnClear.TabIndex = 3;
+            this.btnClear.Text = "Wyczyść";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
             // PictureBrowser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnLoad);
             this.Controls.Add(this.pbPicture);
             this.Name = "PictureBrowser";
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PictureBrowser_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.pbPicture)).EndInit();
             this.ResumeLayout(false);
 
@@ -75,6 +89,7 @@
         private System.Windows.Forms.PictureBox pbPicture;
         private System.Windows.Forms.Button btnLoad;
         private System.Windows.Forms.OpenFileDialog ofdOpenPicture;
+        private System.Windows.Forms.Button btnClear;
     }
 }
 

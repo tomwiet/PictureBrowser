@@ -14,23 +14,82 @@ namespace PictureBrowser
     {
         public PictureBrowser()
         {
-            Picture picture= new Picture();
+            
             InitializeComponent();
+            btnClear.Enabled = false;
+            LoadPreviousPicture();
+           
 
         }
 
+        public void LoadPreviousPicture()
+        {
+            var fileHelper = new FileHelper();
+
+            var picturePath = fileHelper.RestorePicturePathFromFile();
+            
+            if(picturePath != null)
+            {
+
+                pbPicture.ImageLocation = picturePath;
+                pbPicture.SizeMode = PictureBoxSizeMode.Zoom;
+
+            }
+        }
+        
+
         private void btnLoad_Click(object sender, EventArgs e)
         {
-            Picture picture = new Picture();
-
-            if (ofdOpenPicture.ShowDialog() == DialogResult.OK)
+            try
             {
-                picture.picturePath = ofdOpenPicture.FileName;
-                pbPicture.ImageLocation = picture.picturePath;
-                pbPicture.SizeMode = PictureBoxSizeMode.Zoom;
-                MessageBox.Show(pbPicture.ClientSize.Width.ToString() +" " + pbPicture.ClientSize.Height.ToString());
+                if(ofdOpenPicture.ShowDialog() == DialogResult.OK)
+                {
+                    
+                    pbPicture.ImageLocation = ofdOpenPicture.FileName;
+                    pbPicture.SizeMode = PictureBoxSizeMode.Zoom;
+                   
+                }
+                else
+                {
+                    throw new Exception("Nee udało się załadować pliku");
+                }
                 
             }
+            
+            catch(Exception ex) 
+            { 
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+
+        private void PictureBrowser_FormClosing(object sender, FormClosingEventArgs e)
+        { 
+            var fileHelper = new FileHelper();
+            
+            if(pbPicture.Image != null)
+            {
+               
+                fileHelper.SavePicturePathToFile(pbPicture.ImageLocation);
+                pbPicture.Image.Dispose();
+
+            }
+            else
+            {
+                fileHelper.RemoveFile();
+            }
+            
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            pbPicture.Image = null;
+            btnClear.Enabled = false;
+        }
+
+        private void pbPicture_LoadCompleted(object sender, AsyncCompletedEventArgs e)
+        {
+            btnClear.Enabled = true;
         }
     }
 }

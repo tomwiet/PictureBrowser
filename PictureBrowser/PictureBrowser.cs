@@ -17,6 +17,9 @@ namespace PictureBrowser
             
             InitializeComponent();
             btnClear.Enabled = false;
+            pbPicture.WaitOnLoad = false;
+            prsPictureLoading.Visible = false;
+            lblPictureLoadinPercent.Visible = false;
             LoadPreviousPicture();
            
 
@@ -31,27 +34,34 @@ namespace PictureBrowser
             if(picturePath != null)
             {
 
-                pbPicture.ImageLocation = picturePath;
-                pbPicture.SizeMode = PictureBoxSizeMode.Zoom;
+                ShowInPictureBox(picturePath);
 
             }
         }
-        
+
+        private void ShowInPictureBox(string picturePath)
+        {
+            pbPicture.SizeMode = PictureBoxSizeMode.Zoom;
+            pbPicture.LoadAsync(picturePath);
+            //pbPicture.ImageLocation = picturePath;
+            
+        }
 
         private void btnLoad_Click(object sender, EventArgs e)
         {
+            prsPictureLoading.Visible = true;
+            lblPictureLoadinPercent.Visible = true;
             try
             {
                 if(ofdOpenPicture.ShowDialog() == DialogResult.OK)
                 {
                     
-                    pbPicture.ImageLocation = ofdOpenPicture.FileName;
-                    pbPicture.SizeMode = PictureBoxSizeMode.Zoom;
-                   
+                    ShowInPictureBox(ofdOpenPicture.FileName);
+                 
                 }
                 else
                 {
-                    throw new Exception("Nee udało się załadować pliku");
+                    throw new Exception("Nie udało się załadować pliku");
                 }
                 
             }
@@ -71,7 +81,7 @@ namespace PictureBrowser
             {
                
                 fileHelper.SavePicturePathToFile(pbPicture.ImageLocation);
-                pbPicture.Image.Dispose();
+                //pbPicture.Image.Dispose();
 
             }
             else
@@ -90,6 +100,14 @@ namespace PictureBrowser
         private void pbPicture_LoadCompleted(object sender, AsyncCompletedEventArgs e)
         {
             btnClear.Enabled = true;
+            prsPictureLoading.Visible = false;
+            lblPictureLoadinPercent.Visible = false;
+        }
+
+        private void pbPicture_LoadProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            prsPictureLoading.Value = e.ProgressPercentage;
+            lblPictureLoadinPercent.Text = e.ProgressPercentage.ToString() + "%";
         }
     }
 }

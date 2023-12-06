@@ -112,7 +112,7 @@ namespace PictureBrowser
             lblPictureLoadinPercent.Text = e.ProgressPercentage.ToString() + "%";
             if(e.ProgressPercentage == 100)
             {
-                Thread.Sleep(1000);
+                //Thread.Sleep(1000);
                 prsPictureLoading.Visible = false;
                 lblPictureLoadinPercent.Visible = false;
             }

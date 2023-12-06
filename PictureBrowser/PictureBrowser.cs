@@ -14,6 +14,15 @@ namespace PictureBrowser
 {
     public partial class PictureBrowser : Form
     {
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                var cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000;
+                return cp;
+            }
+        }
         public PictureBrowser()
         {
             

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -43,25 +45,21 @@ namespace PictureBrowser
         {
             pbPicture.SizeMode = PictureBoxSizeMode.Zoom;
             pbPicture.LoadAsync(picturePath);
-            //pbPicture.ImageLocation = picturePath;
-            
+            gbxPicture.Text = Path.GetFileName(picturePath);
+
         }
 
         private void btnLoad_Click(object sender, EventArgs e)
         {
-            prsPictureLoading.Visible = true;
-            lblPictureLoadinPercent.Visible = true;
+            
             try
             {
                 if(ofdOpenPicture.ShowDialog() == DialogResult.OK)
                 {
-                    
+                    prsPictureLoading.Visible = true;
+                    lblPictureLoadinPercent.Visible = true;
                     ShowInPictureBox(ofdOpenPicture.FileName);
-                 
-                }
-                else
-                {
-                    throw new Exception("Nie udało się załadować pliku");
+
                 }
                 
             }
@@ -81,7 +79,6 @@ namespace PictureBrowser
             {
                
                 fileHelper.SavePicturePathToFile(pbPicture.ImageLocation);
-                //pbPicture.Image.Dispose();
 
             }
             else
@@ -95,19 +92,30 @@ namespace PictureBrowser
         {
             pbPicture.Image = null;
             btnClear.Enabled = false;
+            lblWidth.Text = "Szerokość:";
+            lblHeight.Text = "Wysokość:";
+            gbxPicture.Text = "Obraz";
         }
 
         private void pbPicture_LoadCompleted(object sender, AsyncCompletedEventArgs e)
         {
             btnClear.Enabled = true;
-            prsPictureLoading.Visible = false;
-            lblPictureLoadinPercent.Visible = false;
+            lblWidth.Text = $"Szerokość: {pbPicture.ClientSize.Width.ToString()} px";
+            lblHeight.Text = $"Wysokość: {pbPicture.ClientSize.Height.ToString()} px";
+            
+            
         }
 
         private void pbPicture_LoadProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             prsPictureLoading.Value = e.ProgressPercentage;
             lblPictureLoadinPercent.Text = e.ProgressPercentage.ToString() + "%";
+            if(e.ProgressPercentage == 100)
+            {
+                Thread.Sleep(1000);
+                prsPictureLoading.Visible = false;
+                lblPictureLoadinPercent.Visible = false;
+            }
         }
     }
 }

@@ -27,13 +27,18 @@ namespace PictureBrowser
         {
             
             InitializeComponent();
+            SetControlsState();
+            LoadPreviousPicture();
+           
+
+        }
+
+        private void SetControlsState()
+        {
             btnClear.Enabled = false;
             pbPicture.WaitOnLoad = false;
             prsPictureLoading.Visible = false;
             lblPictureLoadinPercent.Visible = false;
-            LoadPreviousPicture();
-           
-
         }
 
         public void LoadPreviousPicture()
